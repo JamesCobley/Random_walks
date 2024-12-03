@@ -9,15 +9,14 @@ Created on Mon Nov 25 13:40:51 2024
 
 import argparse
 from simulation import Simulation
-#from stats import Stats
-from plotting import Plot
+from stats import Stats
+from stats import Plot
 
 
 def main(): 
     parser= argparse.ArgumentParser(description= 'Redox Proteoform Simulation')
     parser.add_argument('--run-simulate', action= 'store_true', help='run the simulation subprogram')
     parser.add_argument('--run-stats', action= 'store_true', help='run the stats subprogram')
-    parser.add_argument('--run-plotting', action= 'store_true', help= 'run the plotting subprogram')
     args=  parser.parse_args()
     
     if args.run_simulate: # is True
@@ -28,18 +27,17 @@ def main():
         sim.save_positions()
         print('Saving positions ...')
         
-    '''
+    
     if args.run_stats: 
         print('Running stats.py ...')
-        stats= Stats()
-        stats.load_data()
-    '''    
-    if args.run_plotting:
-        print('Running plotting.py ...')
-        plot= Plot()
+        stats= Stats(filename= 'positions.csv')
+        stats.calculate_msd()
+        
+        print('Making plots ...')
+        plot= Plot(stat_calc=stats) # instantiate the Stats class
         plot.plot_positions()
-        print('Plotting positions ...')
-
+        plot.plot_msd()
+        
     print('Done!')
 
 if __name__ == '__main__':
